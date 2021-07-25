@@ -1,7 +1,9 @@
+from typing import Dict
 import graphene
 from graphene.relay import Node
 from graphene.types.scalars import String
 from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
+from mongoengine.fields import EmbeddedDocumentField
 from models import Selections as SelectionsModel
 from models import Selectors as SelectorsModel
 from flask_graphql_auth import (
@@ -21,6 +23,11 @@ class Selectors(MongoengineObjectType):
 
     class Meta:
         model = SelectorsModel
+
+class InputSelectors(graphene.InputObjectType):
+
+    selection_id = graphene.String()
+    value = graphene.String()
 
 
 class Selections(MongoengineObjectType):
@@ -61,8 +68,6 @@ class RefreshMutation(graphene.Mutation):
 
 
 class Query(graphene.ObjectType):
-    #node = Node.Field()
-    # allListings = MongoengineConnectionField(Listings)
 
     allSelections = graphene.List(Selections, token=graphene.String())
     selectionsByName = graphene.List(Selections, name=graphene.String())
@@ -76,26 +81,69 @@ class Query(graphene.ObjectType):
         return list(SelectionsModel.objects.filter(name=name).all())
 
 
-# class CreateData(graphene.Mutation):
-#     class Arguments(object):
-#         name = graphene.String()
-#         access = graphene.String()
-#         token = graphene.String()
+class CreateData(graphene.Mutation):
+    class Arguments(object):
+        name = graphene.String()
+        options = graphene.List(InputSelectors)
+        token = graphene.String()
 
-#     ok = graphene.Boolean()
-#     data = graphene.Field(Selections)
+    ok = graphene.Boolean()
+    data = graphene.Field(Selections)
 
-#     @classmethod
-#     @mutation_jwt_required
-#     def mutate(root, info, name, access):
-#         data = SelectionsModel(name=name, access=access)
-#         data.save()
-#         ok = True
-#         return CreateData(data=data, ok=ok)
+    @mutation_jwt_required
+    def mutate(root, info, name, options):
+        data = SelectionsModel(name=name, options=options)
+        data.save()
+        ok = True
+        return CreateData(data=data, ok=ok)
 
+
+class UpdateData(graphene.Mutation):
+    class Arguments(object):
+        name = graphene.String()
+        options = graphene.List(InputSelectors)
+        token = graphene.String()
+
+    ok = graphene.Boolean()
+    data = graphene.Field(Selections)
+
+    @mutation_jwt_required
+    def mutate(root, info, name, options):
+        currentSelection =  SelectionsModel.objects.get(name=name)
+        for item in options:
+            temp = SelectorsModel(selection_id = item['selection_id'], value = item['value'])
+            currentSelection.options.append(temp)
+
+        currentSelection.save()
+        ok = True
+        return UpdateData(data=currentSelection, ok=ok)
+
+
+class DeleteData(graphene.Mutation):
+    class Arguments(object):
+        name = graphene.String()
+        selection_id = graphene.String()
+        token = graphene.String()
+
+    ok = graphene.Boolean()
+    data = graphene.Field(Selections)
+
+    @mutation_jwt_required
+    def mutate(root, info, name, selection_id):
+        currentSelection =  SelectionsModel.objects.get(name=name)
+        
+        for item in currentSelection.options:
+            if item.selection_id == selection_id:
+                currentSelection.options.remove(item)
+                currentSelection.save()          
+        
+        ok = True
+        return DeleteData(data=currentSelection, ok=ok)
 
 class MyMutations(graphene.ObjectType):
-    # create_data = CreateData.Field()
+    delete_data = DeleteData.Field()
+    update_data = UpdateData.Field()
+    create_data = CreateData.Field()
     login = AuthMutation.Field()
     refresh = RefreshMutation.Field()
 
