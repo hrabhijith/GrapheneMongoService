@@ -1,1 +1,1 @@
-# GraphQL server using Flask and MongoDB 
+# GraphQL server using Flask and MongoDB
