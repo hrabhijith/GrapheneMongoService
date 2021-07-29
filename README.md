@@ -25,23 +25,28 @@ This API is built on Flask Python Framework. This server API implements GraphQL 
 
 1. Clone or Download the project in to a directory.
 
-2. Install latest stable version of Python 3. [Download] (https://www.python.org/downloads/)
+2. Install latest stable version of Python 3. [https://www.python.org/downloads/]
 
-3. Install virtual environment for Python. [More details] (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+3. Install virtual environment for Python. [https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/]
 
-In terminal, type the below command to install virtual environment.
-`py -m pip3 install --user virtualenv`
+    * In terminal, type the below command to install virtual environment.
 
-Type the below command in the project directory to create virtual environment.
-`py -m venv env`
+    `py -m pip3 install --user virtualenv`
 
-Type the below command in the project directory to activate the virtual environment.
-`.\env\Scripts\activate`
+    * Type the below command in the project directory to create virtual environment.
+
+    `py -m venv env`
+
+    * Type the below command in the project directory to activate the virtual environment.
+
+    `.\env\Scripts\activate`
 
 4. Type the below command in the project directory to install all required modules.
+
 `pip3 install -r requirements.txt`
 
 5. Execute the below command to run the application.
+
 `python3 app.py`
 
 6. The application will start running at 'localhost:5000'.
@@ -54,7 +59,6 @@ Type the below command in the project directory to activate the virtual environm
 Graphene provides an UI to execute the implemented Queries and Mutations in the server, visualize the input and return value types for those queries and mutations. **Also, the same query syntax is used in all consumable client languages.**
 
 1. After the above installation and execution steps, Open a browser and go to 'localhost:5000/graphql'
-![GraphQL Playground!](/assets/graphql1.jpg "GraphQL Playground")
 
 2. Generate JWT token.
 
