@@ -202,19 +202,19 @@ After the above installation and execution steps, Open a browser and go to 'loca
             }
         }
 
-The above query is valid and returns just the 'value' from 'options' list from all documents.
+    The above query is valid and returns just the 'value' from 'options' list from all documents.
 
-    ```graphql
-    query{
-        allSelections(token:""){
-            id
-            name
+        ```graphql
+        query{
+            allSelections(token:""){
+                id
+                name
+                }
             }
-        }
 
-The above query is also valid and returns 'id' and 'name' from all documents.
+    The above query is also valid and returns 'id' and 'name' from all documents.
 
-Likewise, return values can be selected from the client side for all the implementations.
+    Likewise, return values can be selected from the client side for all the implementations.
 
 5. Generate refresh token.
 
