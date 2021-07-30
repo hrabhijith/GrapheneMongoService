@@ -80,16 +80,18 @@ The MongoDb collection (Tables/Documents) used for this demo application is show
 
 **Main Document Structure:**
 
-    `{
+    
+    {
         id : Unique String
         name: String
         options: List of embedded documents (Shown below)
-    }`
+    }
 
 
 **Embedded document Structure:**
 
-    `[
+
+    [
         {
             selection_id: String
             value: String
@@ -98,20 +100,21 @@ The MongoDb collection (Tables/Documents) used for this demo application is show
         {
             ...
         }
-    ]`
+    ]
     
 
 After the above installation and execution steps, Open a browser and go to 'localhost:5000/graphql'. The UI provides an input field to put quries or mutations, run them and see the results. Below are the inputs in GraphQL language implemented in this API.
 
 
 1. Generate JWT token. Currently works for all usernames and passwords. When the token expires, refresh token is enough to generate new access token. (See 5)
+
     ```graphql
      mutation {
           login(password: "", username: "") {
              accessToken
              refreshToken
           }
-       }```
+       }
     
 
 2. Examples for 'Query'.
@@ -138,7 +141,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     value
                 }
             }
-        }```
+        }
 
 
 3. Examples for 'Mutation'.
@@ -185,7 +188,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     }
                 }
             }
-        }```
+        }
 
 
 4. Example for query results filtering before the request. Multiple usage of same queries methods. **One of the main advantages of GraphQL.** Same method can be used to get many or one item. 
@@ -197,7 +200,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
                 value
                 }
             }
-        }```
+        }
 
 The above query is valid and returns just the 'value' from 'options' list from all documents.
 
@@ -207,7 +210,7 @@ The above query is valid and returns just the 'value' from 'options' list from a
             id 
             name
             }
-        }```
+        }
 
 The above query is also valid and returns 'id' and 'name' from all documents.
 
@@ -220,5 +223,5 @@ Likewise, return values can be selected from the client side for all the impleme
           refresh(refreshToken: "") {
              newToken
           }
-       }```
+       }
 
