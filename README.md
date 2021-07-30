@@ -207,7 +207,7 @@ The above query is valid and returns just the 'value' from 'options' list from a
     ```graphql
     query{
         allSelections(token:""){
-            id 
+            id
             name
             }
         }
