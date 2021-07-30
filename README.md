@@ -201,14 +201,13 @@ After the above installation and execution steps, Open a browser and go to 'loca
                 }
             }
         }
-    
-    ```graphql
-        query{
-            allSelections(token:""){
-                id
-                name
-                }
+        
+    query{
+        allSelections(token:""){
+            id
+            name
             }
+        }
 
 Both the above queries are valid. The first returns just the 'value' from 'options' list from all documents. 
 
