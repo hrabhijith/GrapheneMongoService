@@ -86,6 +86,7 @@ The MongoDb collection (Tables/Documents) used for this demo application is show
         options: List of embedded documents (Shown below)
     }`
 
+
 **Embedded document Structure:**
 
     `[
@@ -104,18 +105,19 @@ After the above installation and execution steps, Open a browser and go to 'loca
 
 
 1. Generate JWT token. Currently works for all usernames and passwords. When the token expires, refresh token is enough to generate new access token. (See 5)
-
-    `mutation {
+    ```json
+     mutation {
           login(password: "", username: "") {
              accessToken
              refreshToken
           }
-       }`
+       }```
     
 
 2. Examples for 'Query'.
 
-    `query{
+    ```json
+    query{
         allSelections(token:""){
                 id
                 name
@@ -124,10 +126,11 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     value
                 }
             }
-        }`
+        }```
 
 
-    `query{
+    ```json
+    query{
         selectionsByName(name: "Goals", token:""){
                 id
                 name
@@ -136,12 +139,13 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     value
                 }
             }
-        }`
+        }```json
 
 
 3. Examples for 'Mutation'.
 
-    `mutation {
+    ```json
+    mutation {
         createData(name: "", token: "", options: [{selectionId: "", value: ""}]){
             ok 
             data {
@@ -152,10 +156,11 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     }
                 }
             }
-        }`
+        }```
 
 
-    `mutation {
+    ```json
+    mutation {
         updateData(name: "",token: "", options: [{selectionId: "", value: ""}, 
                                                 {selectionId: "", value: ""}]){
             ok 
@@ -168,9 +173,11 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     }
                 }
             }
-        }`
+        }```
 
-    `mutation {
+
+    ```json
+    mutation {
         deleteData(name: "", selectionId: "", token: ""){
             ok 
             data {
@@ -182,27 +189,29 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     }
                 }
             }
-        }`
+        }```
 
 
 4. Example for query results filtering before the request. Multiple usage of same queries methods. **One of the main advantages of GraphQL.** Same method can be used to get many or one item. 
 
-    `query{
+    ```json
+    query{
         allSelections(token:""){
-          options {
-            value
-          }
-        }
-    }`
+            options {
+                value
+                }
+            }
+        }```
 
 The above query is valid and returns just the 'value' from 'options' list from all documents.
 
-    `query{
+    ```json
+    query{
         allSelections(token:""){
             id 
             name
-        }
-    }`
+            }
+        }```
 
 The above query is also valid and returns 'id' and 'name' from all documents.
 
@@ -210,9 +219,10 @@ Likewise, return values can be selected from the client side for all the impleme
 
 5. Generate refresh token.
 
-    `mutation {
+    ```json
+    mutation {
           refresh(refreshToken: "") {
              newToken
           }
-       }`
+       }```
 
