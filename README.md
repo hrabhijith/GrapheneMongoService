@@ -105,7 +105,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
 
 
 1. Generate JWT token. Currently works for all usernames and passwords. When the token expires, refresh token is enough to generate new access token. (See 5)
-    ```json
+    ```graphql
      mutation {
           login(password: "", username: "") {
              accessToken
@@ -116,9 +116,21 @@ After the above installation and execution steps, Open a browser and go to 'loca
 
 2. Examples for 'Query'.
 
-    ```json
+    ```graphql
     query{
         allSelections(token:""){
+                id
+                name
+                options {
+                    selectionId
+                    value
+                }
+            }
+        }
+
+
+    query{
+        selectionsByName(name: "Goals", token:""){
                 id
                 name
                 options {
@@ -129,22 +141,9 @@ After the above installation and execution steps, Open a browser and go to 'loca
         }```
 
 
-    ```json
-    query{
-        selectionsByName(name: "Goals", token:""){
-                id
-                name
-                options {
-                    selectionId
-                    value
-                }
-            }
-        }```json
-
-
 3. Examples for 'Mutation'.
 
-    ```json
+    ```graphql
     mutation {
         createData(name: "", token: "", options: [{selectionId: "", value: ""}]){
             ok 
@@ -156,10 +155,9 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     }
                 }
             }
-        }```
+        }
 
 
-    ```json
     mutation {
         updateData(name: "",token: "", options: [{selectionId: "", value: ""}, 
                                                 {selectionId: "", value: ""}]){
@@ -173,10 +171,8 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     }
                 }
             }
-        }```
+        }
 
-
-    ```json
     mutation {
         deleteData(name: "", selectionId: "", token: ""){
             ok 
@@ -194,7 +190,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
 
 4. Example for query results filtering before the request. Multiple usage of same queries methods. **One of the main advantages of GraphQL.** Same method can be used to get many or one item. 
 
-    ```json
+    ```graphql
     query{
         allSelections(token:""){
             options {
@@ -205,7 +201,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
 
 The above query is valid and returns just the 'value' from 'options' list from all documents.
 
-    ```json
+    ```graphql
     query{
         allSelections(token:""){
             id 
@@ -219,7 +215,7 @@ Likewise, return values can be selected from the client side for all the impleme
 
 5. Generate refresh token.
 
-    ```json
+    ```graphql
     mutation {
           refresh(refreshToken: "") {
              newToken
