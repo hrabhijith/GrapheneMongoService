@@ -1,7 +1,7 @@
 
 # GraphQL server using Flask and MongoDB
 
-This API is built on Flask Python Framework. This server API implements GraphQL query language using Graphene module and connects to MongoDB for storage (Mongoengine). This API authenticates the access by creating and serving JWT token.
+This API is built on Flask Python Framework. This server API implements GraphQL query language using Graphene module and connects to MongoDB for storage (Mongoengine). This API authenticates the client access by creating and serving JWT token.
 
 
 ## GraphQL- What and Why?
@@ -80,7 +80,7 @@ The MongoDb collection (Tables/Documents) used for this demo application is show
 
 **Main Document Structure:**
 
-    ´{
+    `{
         id : Unique String
         name: String
         options: List of embedded documents (Shown below)
@@ -97,17 +97,122 @@ The MongoDb collection (Tables/Documents) used for this demo application is show
         {
             ...
         }
-    ]´
+    ]`
     
 
-1. After the above installation and execution steps, Open a browser and go to 'localhost:5000/graphql'
+After the above installation and execution steps, Open a browser and go to 'localhost:5000/graphql'. The UI provides an input field to put quries or mutations, run them and see the results. Below are the inputs in GraphQL language implemented in this API.
 
-2. Generate JWT token.
 
-3. Example for 'Query'.
+1. Generate JWT token. Currently works for all usernames and passwords. When the token expires, refresh token is enough to generate new access token. (See 5)
 
-4. Example for 'Mutation'.
+    `mutation {
+          login(password: "", username: "") {
+             accessToken
+             refreshToken
+          }
+       }`
+    
 
-5. Example for query results filtering before the request.
+2. Examples for 'Query'.
 
-6. Generate refresh token.
+    `query{
+        allSelections(token:""){
+                id
+                name
+                options {
+                    selectionId
+                    value
+                }
+            }
+        }`
+
+
+    `query{
+        selectionsByName(name: "Goals", token:""){
+                id
+                name
+                options {
+                    selectionId
+                    value
+                }
+            }
+        }`
+
+
+3. Examples for 'Mutation'.
+
+    `mutation {
+        createData(name: "", token: "", options: [{selectionId: "", value: ""}]){
+            ok 
+            data {
+                id 
+                options {
+                    selectionId
+                    value
+                    }
+                }
+            }
+        }`
+
+
+    `mutation {
+        updateData(name: "",token: "", options: [{selectionId: "", value: ""}, 
+                                                {selectionId: "", value: ""}]){
+            ok 
+            data {
+                id 
+                name
+                options {
+                    selectionId
+                    value
+                    }
+                }
+            }
+        }`
+
+    `mutation {
+        deleteData(name: "", selectionId: "", token: ""){
+            ok 
+            data {
+                id 
+                name
+                options{
+                    selectionId 
+                    value
+                    }
+                }
+            }
+        }`
+
+
+4. Example for query results filtering before the request. Multiple usage of same queries methods. **One of the main advantages of GraphQL.** Same method can be used to get many or one item. 
+
+    `query{
+        allSelections(token:""){
+          options {
+            value
+          }
+        }
+    }`
+
+The above query is valid and returns just the 'value' from 'options' list from all documents.
+
+    `query{
+        allSelections(token:""){
+            id 
+            name
+        }
+    }`
+
+The above query is also valid and returns 'id' and 'name' from all documents.
+
+Likewise, return values can be selected from the client side for all the implementations.
+
+5. Generate refresh token.
+
+    `mutation {
+          refresh(refreshToken: "") {
+             newToken
+          }
+       }`
+
