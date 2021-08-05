@@ -80,7 +80,7 @@ class RefreshMutation(graphene.Mutation):
 class Query(graphene.ObjectType):
 
     allSelections = graphene.List(Selections, token=graphene.String())
-    selectionsByName = graphene.List(Selections, name=graphene.String())
+    selectionsByName = graphene.List(Selections, name=graphene.String(), token=graphene.String())
 
     @query_jwt_required
     def resolve_allSelections(self, info):
