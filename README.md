@@ -171,7 +171,7 @@ const auth = setContext((operation, context) => {
         headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
       };
     }
-  });```
+  });
 
 For more information see GraphQL client documentation page.
 
@@ -199,7 +199,7 @@ For more information see GraphQL client documentation page.
                     value
                 }
             }
-        }```
+        }
 
 
 4. Examples for 'Mutation'.
@@ -246,7 +246,7 @@ For more information see GraphQL client documentation page.
                     }
                 }
             }
-        }```
+        }
 
 
 5. Example for query results filtering before the request. Multiple usage of same queries methods. **One of the main advantages of GraphQL.** Same method can be used to get many or one item. 
@@ -265,7 +265,7 @@ For more information see GraphQL client documentation page.
             id
             name
             }
-        }```
+        }
 
 Both the above queries are valid. The first returns just the 'value' from 'options' list from all documents. 
 
