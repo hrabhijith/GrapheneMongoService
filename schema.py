@@ -1,3 +1,4 @@
+from flask_graphql_auth.decorators import mutation_header_jwt_refresh_token_required, mutation_header_jwt_required, query_header_jwt_required
 import graphene
 from graphene_mongo import MongoengineObjectType
 from models import Selections as SelectionsModel
@@ -62,7 +63,7 @@ class RefreshMutation(graphene.Mutation):
     new_token = graphene.String()
 
     @classmethod
-    @mutation_jwt_refresh_token_required
+    @mutation_header_jwt_refresh_token_required
     def mutate(self, _):
         current_user = get_jwt_identity()
         return RefreshMutation(
@@ -70,41 +71,39 @@ class RefreshMutation(graphene.Mutation):
         )
 
 
-# Query class for all results and results by name (Requires Auth token)
+# Query class for all results and results by name (Requires Auth Header)
 # allSelections
-# Accepts: Auth token
 # Returns: All documents from selections collection from MongoDB
 # selectionsByName
-# Accepts: Name of the document, auth token
+# Accepts: Name of the document
 # Returns: Only those documents which matches 'name'
 class Query(graphene.ObjectType):
 
-    allSelections = graphene.List(Selections, token=graphene.String())
-    selectionsByName = graphene.List(Selections, name=graphene.String(), token=graphene.String())
+    allSelections = graphene.List(Selections)
+    selectionsByName = graphene.List(Selections, name=graphene.String())
 
-    @query_jwt_required
+    @query_header_jwt_required
     def resolve_allSelections(self, info):
         return list(SelectionsModel.objects.all())
 
-    @query_jwt_required
+    @query_header_jwt_required
     def resolve_selectionsByName(self, info, name):
         return list(SelectionsModel.objects.filter(name=name).all())
 
 
 # Mutation class to create new document in selections collection
-# in MongoDB (Requires Auth token)
-# Accepts: Auth token, name, options [List of embedded documents]
+# in MongoDB (Requires Auth Header)
+# Accepts: name, options [List of embedded documents]
 # Returns: Ok flag, All documents from selections collection from MongoDB
 class CreateData(graphene.Mutation):
     class Arguments(object):
         name = graphene.String()
         options = graphene.List(InputSelectors)
-        token = graphene.String()
 
     ok = graphene.Boolean()
     data = graphene.Field(Selections)
 
-    @mutation_jwt_required
+    @mutation_header_jwt_required
     def mutate(root, info, name, options):
         data = SelectionsModel(name=name, options=options)
         data.save()
@@ -113,19 +112,18 @@ class CreateData(graphene.Mutation):
 
 
 # Mutation class to update/add to existing embedded document in selections collection
-# in MongoDB (Requires Auth token)
-# Accepts: Auth token, name, options [New List of embedded documents]
+# in MongoDB (Requires Auth Header)
+# Accepts: name, options [New List of embedded documents]
 # Returns: Ok flag, All documents from selections collection from MongoDB
 class UpdateData(graphene.Mutation):
     class Arguments(object):
         name = graphene.String()
         options = graphene.List(InputSelectors)
-        token = graphene.String()
 
     ok = graphene.Boolean()
     data = graphene.Field(Selections)
 
-    @mutation_jwt_required
+    @mutation_header_jwt_required
     def mutate(root, info, name, options):
         currentSelection = SelectionsModel.objects.get(name=name)
         for item in options:
@@ -139,19 +137,18 @@ class UpdateData(graphene.Mutation):
 
 
 # Mutation class to delete an existing embedded document using selection_id
-# (Requires Auth token)
-# Accepts: Auth token, name, selection_id [Id of the embedded document to be deleted]
+# (Requires Auth Header)
+# Accepts: name, selection_id [Id of the embedded document to be deleted]
 # Returns: Ok flag, All documents from selections collection from MongoDB
 class DeleteData(graphene.Mutation):
     class Arguments(object):
         name = graphene.String()
         selection_id = graphene.String()
-        token = graphene.String()
 
     ok = graphene.Boolean()
     data = graphene.Field(Selections)
 
-    @mutation_jwt_required
+    @mutation_header_jwt_required
     def mutate(root, info, name, selection_id):
         currentSelection = SelectionsModel.objects.get(name=name)
 

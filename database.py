@@ -1,5 +1,8 @@
+from os import getenv, name
 from mongoengine import connect
 
 
 def init_db():
-    connect('qualiexplore01', host='mongodb+srv://hrabhijith:GoxB1i0NwXX0aIVM@cluster0.3tp3t.mongodb.net/?retryWrites=true&w=majority', alias='default')
+    uri = getenv('DATABASE_URI')
+    name = getenv('DATABASE_NAME')
+    connect(name, host=uri, alias='default')

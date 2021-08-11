@@ -70,6 +70,44 @@ This API is built on Flask Python Framework. This server API implements GraphQL 
 4. The application will start running at 'localhost:5000'.
 
 
+## Configuration variables
+
+Before running the project either the python command in local or docker run in docker container, the environment variables need to be set.
+
+**Local Execution on Windows**
+
+Run the following commands in CMD terminal.
+
+For Developemnt server
+
+`set CONFIG_ENV=config.DevConfig`
+
+For Production Serve (Not Ideal)
+
+`set CONFIG_ENV=config.ProdConfig`
+
+Set the secret for JWT token creation
+
+`set JWT_SECRET_KEY=yoursecret`
+
+Set the database URI and name
+
+`set DATABASE_URI=databaseuri`
+
+`set DATABASE_NAME=qualiexplore01`
+
+If needed, set the host name and port number(Default: localhost:5000)
+
+`set HOST=hostIP`
+
+`set PORT=portnumber`
+
+
+**Docker container execution**
+
+
+
+
 ## GraphQL Playground
 
 Graphene provides an UI to execute the implemented Queries and Mutations in the server, visualize the input and return value types for those queries and mutations. **Also, the same query syntax is used in all consumable client languages.**
@@ -115,13 +153,33 @@ After the above installation and execution steps, Open a browser and go to 'loca
              refreshToken
           }
        }
-    
 
-2. Examples for 'Query'.
+**Important step**
+
+2. After the generation of JWT token, a authentication header needs to be set from the client side application. Every request to this server must have this auth header. 
+
+For example, from Apollo Angular client.
+
+```js
+const auth = setContext((operation, context) => {
+    const token = localStorage.getItem('accessToken');
+
+    if (token === null) {
+      return {};
+    } else {
+      return {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      };
+    }
+  });```
+
+For more information see GraphQL client documentation page.
+
+3. Examples for 'Query'.
 
     ```graphql
     query{
-        allSelections(token:""){
+        allSelections(){
                 id
                 name
                 options {
@@ -133,7 +191,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
 
 
     query{
-        selectionsByName(name: "Goals", token:""){
+        selectionsByName(name: "Goals"){
                 id
                 name
                 options {
@@ -141,14 +199,14 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     value
                 }
             }
-        }
+        }```
 
 
-3. Examples for 'Mutation'.
+4. Examples for 'Mutation'.
 
     ```graphql
     mutation {
-        createData(name: "", token: "", options: [{selectionId: "", value: ""}]){
+        createData(name: "", options: [{selectionId: "", value: ""}]){
             ok 
             data {
                 id 
@@ -162,7 +220,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
 
 
     mutation {
-        updateData(name: "",token: "", options: [{selectionId: "", value: ""}, 
+        updateData(name: "", options: [{selectionId: "", value: ""}, 
                                                 {selectionId: "", value: ""}]){
             ok 
             data {
@@ -177,7 +235,7 @@ After the above installation and execution steps, Open a browser and go to 'loca
         }
 
     mutation {
-        deleteData(name: "", selectionId: "", token: ""){
+        deleteData(name: "", selectionId: ""){
             ok 
             data {
                 id 
@@ -188,14 +246,14 @@ After the above installation and execution steps, Open a browser and go to 'loca
                     }
                 }
             }
-        }
+        }```
 
 
-4. Example for query results filtering before the request. Multiple usage of same queries methods. **One of the main advantages of GraphQL.** Same method can be used to get many or one item. 
+5. Example for query results filtering before the request. Multiple usage of same queries methods. **One of the main advantages of GraphQL.** Same method can be used to get many or one item. 
 
     ```graphql
     query{
-        allSelections(token:""){
+        allSelections(){
             options {
                 value
                 }
@@ -203,11 +261,11 @@ After the above installation and execution steps, Open a browser and go to 'loca
         }
         
     query{
-        allSelections(token:""){
+        allSelections(){
             id
             name
             }
-        }
+        }```
 
 Both the above queries are valid. The first returns just the 'value' from 'options' list from all documents. 
 
@@ -216,7 +274,7 @@ The second returns 'id' and 'name' from all documents.
 Likewise, return values can be selected from the client side for all the implementations.
 
 
-5. Generate refresh token.
+6. Generate refresh token.
 
     ```graphql
     mutation {

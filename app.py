@@ -1,3 +1,4 @@
+from os import getenv
 from flask_graphql_auth.main import GraphQLAuth
 from database import init_db
 from flask import Flask
@@ -8,16 +9,11 @@ from flask_cors import CORS, cross_origin
 
 # Flask app configuration
 app = Flask(__name__)
-
-# Configuration for JWT token genearation
-app.config["JWT_SECRET_KEY"] = "amazingapp"  # change this!
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 10  # In minutes
-app.config["JWT_REFRESH_TOKEN_EXPIRES"] = 1  # In days
+configEnv = getenv('CONFIG_ENV')
+app.config.from_object(configEnv)
 
 cors = CORS(app)
 auth = GraphQLAuth(app)
-
-app.debug = True
 
 app.add_url_rule(
     '/graphql',
@@ -32,4 +28,4 @@ def graphql_playground():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host ='0.0.0.0', port = 5000, debug = True)
+    app.run(host=getenv('HOST'), port=getenv('PORT'))
