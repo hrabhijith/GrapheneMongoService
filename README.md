@@ -46,7 +46,7 @@ This API is built on Flask Python Framework. This server API implements GraphQL 
 
 `pip3 install -r requirements.txt`
 
-5. Execute the below command to run the application.
+5. Execute the below command to run the application. (Congifgure variables before this step, see below for more info)
 
 `python3 app.py`
 
@@ -63,7 +63,7 @@ This API is built on Flask Python Framework. This server API implements GraphQL 
 
     `docker pull hrabhijith/gql-mongo`
 
-3. Run the below command in the terminal.
+3. Run the below command in the terminal. (Congifgure variables in this step, see below for more info)
 
     `docker run --name <container name> -p 5000:5000 hrabhijith/gql-mongo`
 
@@ -74,7 +74,9 @@ This API is built on Flask Python Framework. This server API implements GraphQL 
 
 Before running the project either the python command in local or docker run in docker container, the environment variables need to be set.
 
+
 **Local Execution on Windows**
+
 
 Run the following commands in CMD terminal.
 
@@ -106,6 +108,7 @@ If needed, set the host name and port number(Default: localhost:5000)
 **Docker container execution**
 
 
+`docker run -e CONFIG_ENV=config.DevConfig -e JWT_SECRET_KEY=yoursecretkey -e HOST=0.0.0.0 -e PORT=5000 -e DATABASE_URI=databaseurl -e DATABASE_NAME=qualiexplore01 --name containername -p 5000:5000 hrabhijith/gql-mongo`
 
 
 ## GraphQL Playground
@@ -144,7 +147,7 @@ The MongoDb collection (Tables/Documents) used for this demo application is show
 After the above installation and execution steps, Open a browser and go to 'localhost:5000/graphql'. The UI provides an input field to put quries or mutations, run them and see the results. Below are the inputs in GraphQL language implemented in this API.
 
 
-1. Generate JWT token. Currently works for all usernames and passwords. When the token expires, refresh token is enough to generate new access token. (See 5)
+1. Generate JWT token. Currently works for all usernames and passwords. When the token expires, refresh token is enough to generate new access token. (See 6)
 
     ```graphql
      mutation {
