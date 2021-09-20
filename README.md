@@ -63,11 +63,11 @@ This API is built on Flask Python Framework. This server API implements GraphQL 
 
     `docker pull hrabhijith/gql-mongo`
 
-3. Run the below command in the terminal. (Congifgure variables in this step, see below for more info)
+3. Run the below command in the terminal. (use docker compose with env_vars for this step instead, see below for more info)
 
-    `docker run --name <container name> -p 5000:5000 hrabhijith/gql-mongo`
+    `docker run --name <container_name> -p <required_port>:<actual_port> hrabhijith/gql-mongo`
 
-4. The application will start running at 'localhost:5000'.
+4. The application will start running at localhost:<required_port>.
 
 
 ## Configuration variables
@@ -77,38 +77,38 @@ Before running the project either the python command in local or docker run in d
 
 **Local Execution on Windows**
 
-
-Run the following commands in CMD terminal.
+The environment variables will be picked automatically from .env file (included). Refer the below commands for options for the variables.
 
 For Developemnt server
 
-`set CONFIG_ENV=config.DevConfig`
+`CONFIG_ENV=config.DevConfig`
 
 For Production Serve (Not Ideal)
 
-`set CONFIG_ENV=config.ProdConfig`
+`CONFIG_ENV=config.ProdConfig`
 
 Set the secret for JWT token creation
 
-`set JWT_SECRET_KEY=yoursecret`
+`JWT_SECRET_KEY=yoursecret`
 
 Set the database URI and name
 
-`set DATABASE_URI=databaseuri`
+`DATABASE_URI=databaseuri`
 
-`set DATABASE_NAME=qualiexplore01`
+`DATABASE_NAME=qualiexplore01`
 
 If needed, set the host name and port number(Default: localhost:5000)
 
-`set HOST=hostIP`
+`HOST=hostIP`
 
-`set PORT=portnumber`
+`PORT=portnumber`
 
 
 **Docker container execution**
 
+The docker-compose.yml file is included in the code which helps to set the configuration variables from .env file (which is also included) and runs the docker image in the container. Configure the variable in the .env file accordingly and run the following command.
 
-`docker run -e CONFIG_ENV=config.DevConfig -e JWT_SECRET_KEY=yoursecretkey -e HOST=0.0.0.0 -e PORT=5000 -e DATABASE_URI=databaseurl -e DATABASE_NAME=qualiexplore01 --name containername -p 5000:5000 hrabhijith/gql-mongo`
+`docker-compose up`
 
 
 ## GraphQL Playground

@@ -1,7 +1,8 @@
-from os import getenv
+import os
+
 
 class Config:
-    JWT_SECRET_KEY = getenv("JWT_SECRET_KEY")
+    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
     JWT_ACCESS_TOKEN_EXPIRES = 10
     JWT_REFRESH_TOKEN_EXPIRES = 1
 

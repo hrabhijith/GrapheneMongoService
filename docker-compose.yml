@@ -1,10 +1,11 @@
 version: '3'
 
-gql-mongo:
-  ports:
-    - "6000:6000"
+services:
+  gql-mongo:
+    ports:
+      - "6000:6000"
 
-  env_file:
-    - env_vars
+    env_file:
+      - .env
 
-  image: hrabhijith/gql-mongo:latest
+    image: hrabhijith/gql-mongo:latest

@@ -1,4 +1,6 @@
-from os import getenv
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from flask_graphql_auth.main import GraphQLAuth
 from database import init_db
 from flask import Flask
@@ -7,9 +9,12 @@ from schema import schema
 from flask_cors import CORS, cross_origin
 
 
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
 # Flask app configuration
 app = Flask(__name__)
-configEnv = getenv('CONFIG_ENV')
+configEnv = os.environ.get('CONFIG_ENV')
 app.config.from_object(configEnv)
 
 cors = CORS(app)
@@ -28,4 +33,4 @@ def graphql_playground():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host=getenv('HOST'), port=getenv('PORT'))
+    app.run(host=os.environ.get('HOST'), port=os.environ.get('PORT'))
