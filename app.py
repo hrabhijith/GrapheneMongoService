@@ -28,7 +28,7 @@ app.add_url_rule(
 @app.route("/graphql", methods=["GET", "POST"])
 @cross_origin()
 def graphql_playground():
-    pass
+    pass 
 
 
 if __name__ == '__main__':
