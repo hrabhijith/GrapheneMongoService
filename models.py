@@ -26,8 +26,8 @@ class User(EmbeddedDocument):
 
 
 class ErrorInfo(EmbeddedDocument):
-    label_ids = ListField(IntField)
-    source =  ListField(StringField)
+    label_ids = ListField(IntField())
+    source =  ListField(StringField())
     description = StringField()
 
 
@@ -35,6 +35,7 @@ class Errors(EmbeddedDocument):
     text = StringField()
     checked = BooleanField()
     value = EmbeddedDocumentField(ErrorInfo)
+    children = ListField()
 
 
 class Description(EmbeddedDocument):

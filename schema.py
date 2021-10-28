@@ -139,16 +139,20 @@ class RefreshMutation(graphene.Mutation):
 # Returns: Only those documents which matches 'name'
 class Query(graphene.ObjectType):
 
-    allUsers = graphene.List(Users, token=graphene.String())
-    # selectionsByName = graphene.List(Selections, name=graphene.String())
+    users = graphene.List(Users)
+    filters = graphene.List(Filters)
+    factors = graphene.List(Factors)
 
-    @query_jwt_required
-    def resolve_allUsers(self, info):
+    def resolve_users(self, info):
         return list(UsersModel.objects.all())
 
-    # @query_header_jwt_required
-    # def resolve_selectionsByName(self, info, name):
-    #     return list(SelectionsModel.objects.filter(name=name).all())
+    @query_header_jwt_required
+    def resolve_filters(self, info):
+        return list(FiltersModel.objects.all())
+    
+    @query_header_jwt_required
+    def resolve_factors(self, info):
+        return list(FactorsModel.objects.all())
 
 
 # Mutation class to create new document in selections collection
@@ -171,14 +175,14 @@ class Query(graphene.ObjectType):
 #         return CreateData(data=data, ok=ok)
 
 
-# # Mutation class to update/add to existing embedded document in selections collection
-# # in MongoDB (Requires Auth Header)
-# # Accepts: name, options [New List of embedded documents]
-# # Returns: Ok flag, All documents from selections collection from MongoDB
-# class UpdateData(graphene.Mutation):
+# Mutation class to update/add to existing embedded document in selections collection
+# in MongoDB (Requires Auth Header)
+# Accepts: name, options [New List of embedded documents]
+# Returns: Ok flag, All documents from selections collection from MongoDB
+# class UpdateFilter(graphene.Mutation):
 #     class Arguments(object):
 #         name = graphene.String()
-#         options = graphene.List(InputSelectors)
+#         labels = graphene.List(FilterType)
 
 #     ok = graphene.Boolean()
 #     data = graphene.Field(Selections)
@@ -231,4 +235,4 @@ class MyMutations(graphene.ObjectType):
 
 
 # Intiates Graphene (GraphQL) schema
-schema = graphene.Schema(query=Query, mutation=MyMutations, types=[Users])
+schema = graphene.Schema(query=Query, mutation=MyMutations, types=[Filters, Factors, Users])
