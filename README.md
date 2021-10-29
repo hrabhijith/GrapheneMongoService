@@ -3,24 +3,39 @@
 
 This API is built on Flask Python Framework. This server API implements GraphQL query language using Graphene module and connects to MongoDB for storage (Mongoengine). This API authenticates the client access by creating and serving JWT token.
 
+## Creation of MongoDb database for Qualiexplore application
 
-## GraphQL- What and Why?
+This server uses the database structure which is required for Qualiexplore application. 
 
-1. GraphQL is an improvised language/architecture to implement Server and Client connections on HTTP, mainly to access databases. It has only two main operations, mentioned below, compared to similar and most widely used architecture 'REST'.
+Three MongoDb collections has to be created for this server to work properly with Qualiexplore.
 
-   * 'Query' - compared to GET method of REST based implementation.
-   * 'Mutation' - compared to POST, PUT, DELETE methods of REST based implementation.
+1. filters Collection.
+2. factors Collection.
+3. users Collection.
 
-2. GraphQL server can be consumed by a variety of clients and the servers can also be bulit in several languages. [Click here for more details] (https://graphql.org/)
+The Qualiexplore application has 'filters.json', 'factors.json' files in the folder src/assets/json. The same structures has to be imported into the MogoDb Atlas cloud application using the following instructions.
 
-3. **Queries can be modified from client side for filtering the response before the request**, which gives the ability to use same query for multiple types of data access and avoids excess data transfer between server and client.
+1. Install MongoDb database tools in to your PC. [https://www.mongodb.com/try/download/database-tools]
+2. Run the following mongoimport command for both filters and factors. Use the .json file paths from Qualiexplore.
 
-4. Authentication using GraphQL queries.
+`mongoimport --db <db_name> --collection <collection_name> --authenticationDatabase admin --username <user_name> --password <password> --drop --file <path_of_the_json_file>`
 
-5. Easy integration with any server frameworks and database servers.
+3. The users collection has to be created manually in MongoDb cloud. The structure is shown below.
 
-6. All CRUD operations using similar GraphQL syntax.
+```JSON
+    {
+     "users":[
+         {"username":"admin","password":"admin"},
+         {"username":"user","password":"user"}
+         ]
+    }
+```
 
+## GraphQl server for Qualiexplore.
+
+This branch is optimized for serving the Qualiexplore application loacted in the following forked GitHub repository. (Mind the branch)
+
+[https://github.com/hrabhijith/qualiexplore/tree/authngql]
 
 ## Local Installation [only documented for windows]
 
@@ -110,7 +125,6 @@ The docker-compose.yml file is included in the code which helps to set the confi
 
 `docker-compose up`
 
-
 ## GraphQL Playground
 
 Graphene provides an UI to execute the implemented Queries and Mutations in the server, visualize the input and return value types for those queries and mutations. **Also, the same query syntax is used in all consumable client languages.**
@@ -150,5 +164,67 @@ const auth = setContext((operation, context) => {
     }
   });
 ```
+
+3. The following queries have been implemented to support qualiexplore.
+
+```graphql
+     query {
+        users {
+          users {
+            username
+            password
+          }
+        }
+      }
+```
+
+```graphql
+     query {factors{
+            checked
+            children {
+              checked
+              text
+              value {
+                description
+              }
+              children {
+                checked
+                text
+                value {
+                  description
+                }
+                children {
+                  checked
+                  text
+                  value {
+                    labelIds
+                    source
+                    description
+                  }
+                }
+              }
+            }
+            text
+            value {
+              description
+            }
+          }}
+```
+
+```graphql
+     query {
+        filters {
+          categories {
+            labels {
+              checked
+              id
+              name
+            }
+            name
+          }
+        }
+      }
+```
+
 
 For more information see GraphQL client documentation page.
