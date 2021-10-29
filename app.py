@@ -25,10 +25,11 @@ app.add_url_rule(
     view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True)
 )
 
+
 @app.route("/graphql", methods=["GET", "POST"])
 @cross_origin()
 def graphql_playground():
-    pass 
+    pass
 
 
 if __name__ == '__main__':

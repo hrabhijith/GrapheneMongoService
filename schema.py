@@ -18,26 +18,14 @@ from flask_graphql_auth import (
     mutation_jwt_required,
 )
 
-# MongoEngine class to typecast GraphQL Queries for embedded document
-# class Selectors(MongoengineObjectType):
-
-#     class Meta:
-#         model = SelectorsModel
-
-
-# MongoEngine class to typecast GraphQL Mutations for embedded document
-# class InputSelectors(graphene.InputObjectType):
-
-#     class Meta:
-#         model = SelectorsModel
+# MongoEngine classes to typecast GraphQL Mutations and Queries for document
 
 
 class User(MongoengineObjectType):
     class Meta:
         model = UserModel
-    
 
-# MongoEngine class to typecast GraphQL Mutations and Queries for document
+
 class Users(MongoengineObjectType):
 
     class Meta:
@@ -131,12 +119,13 @@ class RefreshMutation(graphene.Mutation):
         )
 
 
-# Query class for all results and results by name (Requires Auth Header)
-# allSelections
-# Returns: All documents from selections collection from MongoDB
-# selectionsByName
-# Accepts: Name of the document
-# Returns: Only those documents which matches 'name'
+# Query class for all results of users, filters, factors
+# users
+# Returns: All documents from users collection from MongoDB
+# filters
+# Returns: All documents from filters collection from MongoDB
+# factors
+# Returns: All documents from factors collection from MongoDB
 class Query(graphene.ObjectType):
 
     users = graphene.List(Users)
@@ -149,7 +138,7 @@ class Query(graphene.ObjectType):
     @query_header_jwt_required
     def resolve_filters(self, info):
         return list(FiltersModel.objects.all())
-    
+
     @query_header_jwt_required
     def resolve_factors(self, info):
         return list(FactorsModel.objects.all())
@@ -235,4 +224,5 @@ class MyMutations(graphene.ObjectType):
 
 
 # Intiates Graphene (GraphQL) schema
-schema = graphene.Schema(query=Query, mutation=MyMutations, types=[Filters, Factors, Users])
+schema = graphene.Schema(query=Query, mutation=MyMutations, types=[
+                         Filters, Factors, Users])
