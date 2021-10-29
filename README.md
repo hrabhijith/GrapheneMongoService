@@ -3,6 +3,12 @@
 
 This API is built on Flask Python Framework. This server API implements GraphQL query language using Graphene module and connects to MongoDB for storage (Mongoengine). This API authenticates the client access by creating and serving JWT token.
 
+## GraphQl server for Qualiexplore.
+
+This branch is optimized for serving the Qualiexplore application loacted in the following forked GitHub repository. (Mind the branch)
+
+[https://github.com/hrabhijith/qualiexplore/tree/authngql]
+
 ## Creation of MongoDb database for Qualiexplore application
 
 This server uses the database structure which is required for Qualiexplore application. 
@@ -30,12 +36,6 @@ The Qualiexplore application has 'filters.json', 'factors.json' files in the fol
          ]
     }
 ```
-
-## GraphQl server for Qualiexplore.
-
-This branch is optimized for serving the Qualiexplore application loacted in the following forked GitHub repository. (Mind the branch)
-
-[https://github.com/hrabhijith/qualiexplore/tree/authngql]
 
 ## Local Installation [only documented for windows]
 
