@@ -24,7 +24,7 @@ The Qualiexplore application has 'filters.json', 'factors.json' files in the fol
 1. Install MongoDb database tools in to your PC. [https://www.mongodb.com/try/download/database-tools]
 2. Run the following mongoimport command for both filters and factors. Use the .json file paths from Qualiexplore.
 
-`mongoimport --db <db_name> --collection <collection_name> --authenticationDatabase admin --username <user_name> --password <password> --drop --file <path_of_the_json_file>`
+`mongoimport --uri <connection_string> --collection myData --drop --file <filename>`
 
 3. The users collection has to be created manually in MongoDb cloud. The structure is shown below.
 
